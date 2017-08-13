@@ -1,0 +1,67 @@
+		{
+            id: "SSV_Base_Cost_AED",
+			alias: "SSV Base Cost (AED)",
+            dataType: tableau.dataTypeEnum.float
+        }, {
+            id: "SSV_Actual_Fuel_Consumption_L",
+            alias: " SSV Actual fuel consumption (l)",
+            dataType: tableau.dataTypeEnum.float
+        },{
+            id: "SSV_Base_Fuel_consumption_L",
+            alias: "SSV Base Fuel Consumption (l)",
+            dataType: tableau.dataTypeEnum.float
+        },{
+            id: "SSV_Actual_Electricity_kWh",
+			alias: "SSV Actual Electricity (kWh)",
+            dataType: tableau.dataTypeEnum.float
+        }, {
+            id: "SSV_Base_Electricity_kWh",
+            alias: " SSV Base Electricity (kWh)",
+            dataType: tableau.dataTypeEnum.float
+        },{
+            id: "SSV_Actual_Fuel_Cost_AED_Per_L",
+            alias: " SSV Actual Fuel Cost (AED_per_l)",
+            dataType: tableau.dataTypeEnum.float
+        },
+		timestamp	ERS Mic-2 Counter	SSV Mic-2 Counter	SSV Occupancy	SSV Monthly Fuel Delivery [IG]	SSV Current Tank Level [L]	ERS Fuel Delivery  [IG]	ERS Tank Level [L]	Months	SSV Baseline kWh	SSV Baseline Fuel Efficiency [L/kWh]	SSV Historical Cost [AED/kWh]
+
+		
+		
+		time_stamp=function(xrr){
+			
+			data_col = $.ajax({
+			url:"https://api.enerwhere-data.com/management/asset/",
+			//url:  "https://api.netbiter.net/operation/v1/rest/json/system/003011FBA240/log/"+xr+"?accesskey=4E9135480112470734D98AF67FBA6B7E&startdate=2017-01-02T18:18:00Z&sortorder=asc&limitrows=3&callback=JSONPCallback",
+			dataType: "json", 
+			async: false
+			}).responseText;
+			
+			
+			
+			
+			function processData(allText) {
+    var allTextLines = allText.split(/\r\n|\n/);
+    var headers = allTextLines[0].split(',');
+    var lines = [];
+
+    for (var i=1; i<allTextLines.length; i++) {
+        var data = allTextLines[i].split(',');
+        if (data.length == headers.length) {
+
+            var tarr = [];
+            for (var j=0; j<headers.length; j++) {
+                tarr.push(headers[j]+":"+data[j]);
+            }
+            lines.push(tarr);
+        }
+    }
+    // alert(lines);
+}
+
+csv=$.ajax({
+        type: "GET",
+        url: "SSV_CSV.csv",
+		async: false,
+        dataType: "text",
+        success: function(data) {processData(data);}
+     }).responseText;

@@ -1,0 +1,47 @@
+	            
+				
+			for (var kfq = 0, lenkq = tab_fin.length; kfq< lenkq; kfq++) {
+				
+				var dated=tab_fin[kfq].timestamp	
+				
+				base_tab={}
+				base_tab['timestamp']=dated
+			   
+				if (kfq==0){
+					
+					base_tab['SSV_Current_Electricity_Consumption_kWh']=288949
+					base_tab['ERS_Current_Electricity_Consumption_kWh']=0	
+					base_tab['ERS_Current_Fuel_Consumption_L']=0
+					base_tab['SSV_Current_Fuel_Consumption_L']=81160
+					base_tab['SSV_Solar_Consumption']=2437
+					base_tab['	ERS_Solar_Consumption']=0
+					base_tab['SSV_MDB2_Consumption']=31781
+					base_tab['SSV_MDB3_Consumption']=63562
+					base_tab['SSV_Kitchen_and_Laundry_Consumption']=72230
+					
+							
+				}
+				if (kfq>0){
+				    base_tab['SSV_Current_Electricity_Consumption_kWh']=tab_fin[kfq].SSV_Mic2_Counter-tab_fin[kfq-1].SSV_Mic2_Counter
+					base_tab['ERS_Current_Electricity_Consumption_kWh']=tab_fin[kfq].ERS_Mic2_Counter-tab_fin[kfq-1].ERS_Mic2_Counter					
+					base_tab['SSV_Current_Fuel_Consumption_L']=parseFloat(tab_fin[kfq-1].SSV_Current_Tank_Level_L)-parseFloat(tab_fin[kfq].SSV_Current_Tank_Level_L)+ parseFloat(tab_fin[kfq].SSV_Monthly_Fuel_Delivery_IG)*4.54609
+					base_tab['ERS_Current_Fuel_Consumption_L']=parseFloat(tab_fin[kfq-1].ERS_Tank_Level_L)-parseFloat(tab_fin[kfq].ERS_Tank_Level_L)+ parseFloat(tab_fin[kfq].ERS_Fuel_Delivery_IG)*4.54609
+					base_tab['SSV_Solar_Consumption']=parseFloat(tab_fin[kfq].SSV_Solar_Counter)-parseFloat(tab_fin[kfq-1].SSV_Solar_Counter)
+					base_tab['ERS_Solar_Consumption']=parseFloat(tab_fin[kfq].ERS_Solar_Counter)-parseFloat(tab_fin[kfq-1].ERS_Solar_Counter)
+					base_tab['SSV_MDB2_Consumption']=parseFloat(tab_fin[kfq].SSV_MDB2_Counter)-parseFloat(tab_fin[kfq-1].SSV_MDB2_Counter)
+					base_tab['SSV_MDB3_Consumption']=parseFloat(tab_fin[kfq].SSV_MDB3_Counter)-parseFloat(tab_fin[kfq-1].SSV_MDB3_Counter)
+					base_tab['SSV_Kitchen_and_Laundry_Consumption']=parseFloat(tab_fin[kfq].SSV_Kitchen_and_Laundry_Counter)-parseFloat(tab_fin[kfq-1].SSV_Kitchen_and_Laundry_Counter)
+					
+					
+					
+					
+				}
+				base_tab['Total_Fuel_Delivery_IG']=parseFloat(tab_fin[kfq].ERS_Fuel_Delivery_IG) +parseFloat(tab_fin[kfq].SSV_Monthly_Fuel_Delivery_IG)
+				base_tab['Total_Electricity_Consumption_kWh']=base_tab['SSV_Current_Electricity_Consumption_kWh']+base_tab['ERS_Current_Electricity_Consumption_kWh']
+				base_tab['Total_Fuel_Consumption_L']=base_tab['SSV_Current_Fuel_Consumption_L']+base_tab['ERS_Current_Fuel_Consumption_L']
+				base_tab['Enerwhere_Invoice_AED']=(base_tab['Total_Electricity_Consumption_kWh'])*1.17-(base_tab['Total_Fuel_Delivery_IG'])*10.5
+				
+				 var cmbq = _.merge(base_tab,tab_fin[kfq]);
+				 qwer.push(cmbq)
+				
+          }
